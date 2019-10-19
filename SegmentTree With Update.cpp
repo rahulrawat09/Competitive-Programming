@@ -60,7 +60,7 @@ int main()
     vector<int> arr(n);
     vector<int> ST(2*n,0);
     
-    for(int i;i<n;i++)
+    for(int i=0;i<n;i++)
     {
         cin>>arr[i];
     }
@@ -89,7 +89,7 @@ int main()
             case 2: cout<<"\nEnter index and value to be updated:";
                     int u,v;
                     cin>>u>>v;
-                    updatevalue(ST,0,0,n-1,arr[u-1]-v,u-1);
+                    updatevalue(ST,0,0,n-1,v-arr[u-1],u-1);
                     arr[u-1]=v;
                     cout<<"\n\nEnter 1 for query, 2 for value update, 3 to exit:";
                     cin>>q;
