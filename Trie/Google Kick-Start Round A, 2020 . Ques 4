@@ -1,0 +1,93 @@
+#include<bits/stdc++.h>
+//#include <boost/multiprecision/cpp_int.hpp>
+//#include <ext/pb_ds/assoc_container.hpp>
+//#include <ext/pb_ds/tree_policy.hpp>
+
+#define ll long long
+//#define bint int1024_t
+#define ld long double
+#define vect vector<ll>
+#define unmap unordered_map
+#define pb push_back
+#define pi 3.1415926536
+#define mod int(1e9+7)
+#define mp make_pair
+#define testcases ll t; cin>>t; while(t--)
+
+using namespace std;
+//using namespace boost::multiprecision;
+//using namespace __gnu_pbds;
+
+ll ans,n,k;
+
+struct trie
+{
+    ll num;
+    unordered_map<char,trie*> tm;
+};
+
+trie* newnode()
+{
+    trie* node=new trie;
+    node->num=0;
+    return node;
+}
+
+void insert(trie*& root,string& s)
+{
+    if(root==NULL)
+        root=newnode();
+
+    trie* temp=root;
+
+    for(int i=0;i<s.length();i++)
+    {
+        if(temp->tm[s[i]]==NULL)
+            temp->tm[s[i]]=newnode();
+        temp=temp->tm[s[i]];
+        temp->num++;
+    }
+}
+
+int dfs(trie* root,ll d)
+{
+    ll cnt=0;
+    for(auto& i:root->tm)
+    {
+        cnt+=dfs(i.second,d+1);
+    }
+    root->num-=cnt;
+    ll c=0;
+    c=(root->num)/k;
+
+    cnt+=c*k;
+    ans+=c*d;
+    return cnt;
+}
+
+int main()
+{
+	ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin>>t;
+    for(int f=1;f<=t;f++)
+    {
+        ans=0;
+        cin>>n>>k;
+        string s[n];
+
+        trie* root=NULL;
+        for(int i=0;i<n;i++)  //input
+        {
+            cin>>s[i];
+            insert(root,s[i]);
+        }
+
+        dfs(root,0);
+
+        cout<<"Case #"<<f<<": "<<ans<<"\n";
+    }
+    return 0;
+}
