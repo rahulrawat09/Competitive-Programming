@@ -1,7 +1,6 @@
 // question link below
 // https://codeforces.com/contest/1354/problem/D// question link below
 
-
 #include<bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //#include <ext/pb_ds/assoc_container.hpp>
@@ -25,6 +24,55 @@ using namespace std;
 //using namespace boost::multiprecision;
 //using namespace __gnu_pbds;
 
+int n,q;
+int ST[4000010];
+int v[1000010];
+
+void buildtree(int index,int s,int e)
+{
+    if(s==e)
+    {
+        ST[index]=v[s];
+        return;
+    }
+    int mid=(s+e)/2;
+    buildtree(2*index,s,mid);
+    buildtree(2*index+1,mid+1,e);
+
+    ST[index]=ST[2*index]+ST[2*index+1];
+}
+
+int del(int index,int s,int e,int k)
+{
+    //cout<<s<<" "<<e<<" "<<k<<" "<<ST[index]<<endl;
+    if(s==e)
+    {
+        ST[index]--;
+        return s;
+    }
+
+    int mid=(s+e)/2,z;
+
+    if(ST[2*index]>=k) z=del(2*index,s,mid,k);
+    else z=del(2*index+1,mid+1,e,k-ST[2*index]);
+
+    ST[index]=ST[2*index]+ST[2*index+1];
+    return z;
+}
+
+void updatevalue(int index,int s,int e,int i)
+{
+    if(i<s||i>e) return;
+
+    ST[index]++;
+
+    if(s!=e)
+    {
+        int mid=(s+e)/2;
+        updatevalue(2*index,s,mid,i);
+        updatevalue(2*index+1,mid+1,e,i);
+    }
+}
 
 int main()
 {
@@ -67,4 +115,6 @@ int main()
     cout<<0;
     return 0;
 }
+
+
 
